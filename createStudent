@@ -1,0 +1,102 @@
+private static void createStudent() {
+        System.out.println("\n수강생을 등록합니다...");
+
+        // 수강생 이름 입력
+        System.out.print("수강생 이름 입력: ");
+        String studentName = sc.next();
+
+        // 선택한 과목을 저장할 리스트
+        List<Subject> selectedSubjects = new ArrayList<>();
+
+        // 필수 과목 선택
+        int displayCount = 0;
+        int mandatoryCount = 0;
+        while (true) {
+
+            if (mandatoryCount < 3) {
+                System.out.println("필수과목 목록:");
+                int index = 0;
+                for (Subject subject : subjectStore) {
+                    if (SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
+                        index++;
+                        System.out.println(index + ". " + subject.getSubjectName());
+                    }
+                }
+                System.out.println("================");
+                System.out.println("과목을 입력해주세요.");
+                String subjectName = sc.next();
+                boolean found = false;
+                for (Subject subject : subjectStore) {
+                    if (subject.getSubjectName().equals(subjectName) && SUBJECT_TYPE_MANDATORY.equals(subject.getSubjectType())) {
+                        selectedSubjects.add(subject);
+                        mandatoryCount++;
+                        displayCount++;
+                        System.out.println("현재 등록한 필수 과목 수: " + displayCount);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    System.out.println("해당 과목을 찾을 수 없습니다. 다시 입력해주세요.");
+                }
+            } else {
+                System.out.println("과목을 추가로 더 입력하시겠습니까? (Y/N)");
+                String answer = sc.next();
+                if (answer.equalsIgnoreCase("Yes") || answer.equalsIgnoreCase("Y")) {
+                    mandatoryCount -=1;
+                } else {
+                    System.out.println("필수 과목 입력을 종료합니다");
+                    break;
+                }
+            }
+        }
+
+        sc.nextLine();
+        // 선택 과목 선택
+        int displayCount2 = 0;
+        int choiceCount = 0;
+        while (true) {
+
+            if (choiceCount < 2) {
+                System.out.println("선택과목 목록:");
+                int index = 0;
+                for (Subject subject : subjectStore) {
+                    if (SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
+                        index++;
+                        System.out.println(index + ". " + subject.getSubjectName());
+                    }
+                }
+                System.out.println("================");
+                System.out.println("과목을 입력해주세요.");
+                String subjectName = sc.nextLine();
+                boolean found = false;
+                for (Subject subject : subjectStore) {
+                    if (subject.getSubjectName().equals(subjectName) && SUBJECT_TYPE_CHOICE.equals(subject.getSubjectType())) {
+                        selectedSubjects.add(subject);
+                        choiceCount++;
+                        displayCount2++;
+                        System.out.println("현재 등록한 선택 과목 수: " + displayCount2);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    System.out.println("해당 과목을 찾을 수 없습니다. 다시 입력해주세요.");
+                }
+
+            } else {
+                System.out.println("과목을 추가로 더 입력하시겠습니까? (Y/N)");
+                String answer = sc.nextLine();
+                if (answer.equalsIgnoreCase("Yes") || answer.equalsIgnoreCase("Y")) {
+                    choiceCount -= 1;
+                } else {
+                    System.out.println("선택 과목 입력을 종료합니다");
+                    break;
+                }
+            }
+        }
+
+        // 저장
+        Student newStudent = new Student(sequence(INDEX_TYPE_STUDENT), studentName, selectedSubjects);
+        studentStore.add(newStudent);
+    }
